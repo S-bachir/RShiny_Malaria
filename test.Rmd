@@ -38,6 +38,63 @@ library(stringr)
   #   load_spatial_data(input$country)
   # })
   # Function to load and clean a country's CSV file
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+#------------------------------------------------------------------------------#
+# Load and clean malaria data
+#------------------------------------------------------------------------------#
+# Define the path to CSV files
+national_file_path <- "data/National_Unit-data_World.csv"    # Path to national data
+subnational_file_path <- "data/Subnational_Unit-data.csv"    # Path to subnational data
+# Clean column names for the national data
+clean_national_columns <- function(df) {
+  df <- df %>%
+    rename(
+      iso3 = ISO3,
+      name = Name,
+      admin_level = `Admin Level`,
+      metric = Metric,
+      units = Units,
+      year = Year,
+      value = Value
+    )
+  return(df)
+}
+
+# Clean column names for the subnational data
+clean_subnational_columns <- function(df) {
+  df <- df %>%
+    rename(
+      iso3 = ISO3,
+      national_unit = `National Unit`,
+      name = Name,
+      admin_level = `Admin Level`,
+      metric = Metric,
+      units = Units,
+      year = Year,
+      value = Value
+    )
+  return(df)
+}
+
+# Load and clean data
+national_data <- read_csv(national_file_path) %>% clean_national_columns()
+subnational_data <- read_csv(subnational_file_path) %>% clean_subnational_columns()
+```
+
+
+```{r}
+#------------------------------------------------------------------------------#
+# Define functions to load and process per-country data
+#------------------------------------------------------------------------------#
+# Function to load a country's CSV file
 load_country_data <- function(country) {
   file_path <- paste0("data/", country, "/", country, ".csv")
   data <- read_csv(file_path)
@@ -77,53 +134,6 @@ load_and_process_country_data <- function(country) {
   
   return(data_long)
 }
-
-```
-
-
-```{r}
-
-```
-
-
-```{r}
-
-national_file_path <- "data/National_Unit-data_World.csv"    # Path to national data
-subnational_file_path <- "data/Subnational_Unit-data.csv"    # Path to subnational data
-# Clean column names for the national data
-clean_national_columns <- function(df) {
-  df <- df %>%
-    rename(
-      iso3 = ISO3,
-      name = Name,
-      admin_level = `Admin Level`,
-      metric = Metric,
-      units = Units,
-      year = Year,
-      value = Value
-    )
-  return(df)
-}
-
-# Clean column names for the subnational data
-clean_subnational_columns <- function(df) {
-  df <- df %>%
-    rename(
-      iso3 = ISO3,
-      national_unit = `National Unit`,
-      name = Name,
-      admin_level = `Admin Level`,
-      metric = Metric,
-      units = Units,
-      year = Year,
-      value = Value
-    )
-  return(df)
-}
-
-# Load and clean data
-national_data <- read_csv(national_file_path) %>% clean_national_columns()
-subnational_data <- read_csv(subnational_file_path) %>% clean_subnational_columns()
 ```
 
 
@@ -209,7 +219,7 @@ server <- function(input, output, session) {
   load_spatial_data <- function(countries) {
     spatial_list <- lapply(countries, function(country) {
       country_code <- toupper(countrycode::countrycode(country, "country.name", "iso3c"))
-      geojson_file <- paste0("path/to/", country_code, "/", country_code, "_ADM", ifelse(input$region_level == "National", "0", "1"), ".geojson")
+      geojson_file <- paste0("data/", country, "/", country_code, "_ADM", ifelse(input$region_level == "National", "0", "1"), ".geojson")
       st_read(geojson_file)
     })
     spatial_data <- do.call(rbind, spatial_list)
