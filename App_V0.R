@@ -70,12 +70,15 @@ load_country_data <- function(country) {
 
 reshape_country_data <- function(data) {
   if (is.null(data)) return(NULL)
+  # Include necessary identifier columns
+  id_cols <- c('asdf_id', 'shapeName')
+  
   # Filter only numeric columns for pivot_longer
-  numeric_data <- data %>% select(where(is.numeric), asdf_id)
+  numeric_data <- data %>% select(all_of(id_cols), where(is.numeric))
   
   data_long <- numeric_data %>%
     pivot_longer(
-      cols = -asdf_id,  # Exclude identifier
+      cols = -all_of(id_cols),  # Exclude identifier columns
       names_to = "variable",
       values_to = "value"
     ) %>%
@@ -118,10 +121,11 @@ map_theme <- theme_minimal() +
   )
 
 # Function to read GEOJSON files for selected countries
-load_spatial_data <- function(countries) {
+load_spatial_data <- function(countries, region_level) {
   spatial_list <- lapply(countries, function(country) {
     country_code <- toupper(countrycode::countrycode(country, "country.name", "iso3c"))
-    geojson_file <- paste0("data/", country, "/", country_code, "_ADM1.geojson")  # Assuming ADM0 for national level & ADM1 for subnational level
+    adm_level <- ifelse(region_level == "National", "0", "1")
+    geojson_file <- paste0("data/", country, "/", country_code, "_ADM", adm_level, ".geojson")
     if (file.exists(geojson_file)) {
       st_read(geojson_file, quiet = TRUE)
     } else {
@@ -145,6 +149,7 @@ ui <- fluidPage(
   titlePanel("Malaria and Related Data Visualization in Africa (2010–2023)"),
   sidebarLayout(
     sidebarPanel(
+      selectInput("region_level", "Region Level:", choices = c("National", "Subnational")),
       selectInput("country", "Select Country:", choices = unique(national_data$name), multiple = TRUE),
       selectInput("metric", "Select Metric:", choices = NULL),
       sliderInput("year_range", "Select Year Range:", min = 2010, max = 2023, value = c(2010, 2023), sep = ""),
@@ -163,24 +168,50 @@ ui <- fluidPage(
 #------------------------------------------------------------------------------#
 server <- function(input, output, session) {
   
-  # Reactive to gather and combine metrics across malaria and country data
+  # Reactive to gather and combine metrics across selected countries
   available_metrics <- reactive({
     req(input$country)
-    malaria_metrics <- unique(c(national_data$metric, subnational_data$metric))
-    if (length(input$country) > 0 && !is.null(input$country[1])) {
-      country_metrics_list <- lapply(input$country, function(cntry) {
-        data <- load_country_data(cntry)
-        if (!is.null(data)) {
-          unique(reshape_country_data(data)$Metric)
-        } else {
-          NULL
-        }
-      })
-      country_metrics <- unique(unlist(country_metrics_list))
-      unique(c(malaria_metrics, country_metrics))
+    
+    # Compute malaria metrics available in selected countries
+    malaria_metrics_list <- lapply(input$country, function(cntry) {
+      if (input$region_level == "National") {
+        metrics <- unique(national_data %>% filter(name == cntry) %>% pull(metric))
+      } else {
+        metrics <- unique(subnational_data %>% filter(national_unit == cntry) %>% pull(metric))
+      }
+      return(metrics)
+    })
+    # Remove NULL or empty elements
+    malaria_metrics_list <- malaria_metrics_list[!sapply(malaria_metrics_list, function(x) length(x) == 0)]
+    # If there are malaria metrics
+    if (length(malaria_metrics_list) > 0) {
+      malaria_metrics <- Reduce(intersect, malaria_metrics_list)
     } else {
-      malaria_metrics
+      malaria_metrics <- character(0)
     }
+    
+    # Now, compute the intersection of country-specific metrics
+    country_metrics_list <- lapply(input$country, function(cntry) {
+      data <- load_country_data(cntry)
+      if (!is.null(data)) {
+        unique(reshape_country_data(data)$Metric)
+      } else {
+        NULL
+      }
+    })
+    # Remove NULL elements
+    country_metrics_list <- country_metrics_list[!sapply(country_metrics_list, is.null)]
+    # If there are country-specific metrics
+    if (length(country_metrics_list) > 0) {
+      country_metrics <- Reduce(intersect, country_metrics_list)
+    } else {
+      country_metrics <- character(0)
+    }
+    
+    # Combine the malaria metrics and country-specific metrics
+    available_metrics <- unique(c(malaria_metrics, country_metrics))
+    
+    return(available_metrics)
   })
   
   # Update metric input choices based on available metrics
@@ -192,7 +223,12 @@ server <- function(input, output, session) {
   malaria_data <- reactive({
     req(input$country, input$metric)
     if (input$metric %in% unique(c(national_data$metric, subnational_data$metric))) {
-      return(national_data %>% filter(name %in% input$country, year >= input$year_range[1], year <= input$year_range[2], metric == input$metric))
+      if (input$region_level == "National") {
+        malaria_data <- national_data %>% filter(name %in% input$country, year >= input$year_range[1], year <= input$year_range[2], metric == input$metric)
+      } else {
+        malaria_data <- subnational_data %>% filter(national_unit %in% input$country, year >= input$year_range[1], year <= input$year_range[2], metric == input$metric)
+      }
+      return(malaria_data)
     } else {
       NULL
     }
@@ -209,31 +245,36 @@ server <- function(input, output, session) {
   # Filtered data based on selected metric
   filtered_data <- reactive({
     req(input$country, input$metric)
-    if (!is.null(malaria_data())) {
-      malaria_data()
+    if (!is.null(malaria_data()) && input$metric %in% malaria_data()$metric) {
+      data <- malaria_data()
     } else {
-      country_data() %>% filter(Metric == input$metric, Year >= input$year_range[1], Year <= input$year_range[2])
+      data <- country_data() %>% filter(Metric == input$metric, Year >= input$year_range[1], Year <= input$year_range[2])
     }
+    return(data)
   })
   
   # Map rendering
   output$dataMap <- renderPlot({
     input$update  # Depend on the update button
     req(filtered_data())
-    spatial_data <- load_spatial_data(input$country)
+    spatial_data <- load_spatial_data(input$country, input$region_level)
     if (is.null(spatial_data) || nrow(spatial_data) == 0) {
       showNotification("No spatial data available for the selected country.", type = "error")
       return(NULL)
     }
     data <- filtered_data()
     
-    # For malaria data, 'name' is the country name
-    # For country data, 'country' in data should match 'shapeName' in spatial data
-    if (!is.null(malaria_data())) {
-      merged_data <- merge(spatial_data, data, by.x = "shapeName", by.y = "name", all.x = TRUE)
+    # Determine the merging columns
+    if (!is.null(malaria_data()) && input$metric %in% malaria_data()$metric) {
+      if (input$region_level == "National") {
+        merge_by_y <- "name"
+      } else {
+        merge_by_y <- "name"
+      }
     } else {
-      merged_data <- merge(spatial_data, data, by.x = "shapeName", by.y = "country", all.x = TRUE)
+      merge_by_y <- "shapeName"
     }
+    merged_data <- merge(spatial_data, data, by.x = "shapeName", by.y = merge_by_y, all.x = TRUE)
     
     if (nrow(merged_data) == 0) {
       showNotification("No data available for the selected options.", type = "warning")
