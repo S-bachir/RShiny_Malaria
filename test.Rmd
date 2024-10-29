@@ -103,24 +103,22 @@ load_country_data <- function(country) {
 
 # Adjusted reshape function to handle variations
 reshape_country_data <- function(data) {
-  data_long <- data %>%
+  # Filtrer uniquement les colonnes numériques pour pivot_longer
+  numeric_data <- data %>% select(where(is.numeric), asdf_id)
+  
+  data_long <- numeric_data %>%
     pivot_longer(
-      cols = matches(".*\\d{4}.*"),
+      cols = -asdf_id,  # Exclut l'identifiant
       names_to = "variable",
       values_to = "value"
-    )
-  
-  # Extract Metric, Year, and Statistic
-  data_long <- data_long %>%
+    ) %>%
     mutate(
       Metric = sub("\\.\\d{4}.*", "", variable),
-      Year = as.integer(sub(".*\\.(\\d{4}).*", "\\1", variable)),
-      Statistic = sub(".*\\d{4}\\.(.*)", "\\1", variable)
+      Year = as.integer(str_extract(variable, "\\d{4}")),
+      Statistic = sub(".*\\d{4}\\.", "", variable)
     ) %>%
-    filter(!is.na(Year))
-  
-  # Remove the 'variable' column
-  data_long <- data_long %>% select(-variable)
+    filter(!is.na(Year)) %>%
+    select(-variable)
   
   return(data_long)
 }
@@ -320,6 +318,8 @@ server <- function(input, output, session) {
 ```
 
 ```{r}
+
+
 ```
 
 ```{r}
