@@ -32,8 +32,8 @@ This Shiny app provides interactive visualizations of malaria and related data a
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/username/malaria-visualization.git
-    cd malaria-visualization
+    git clone https://github.com/S-bachir/RShiny_Malaria.git
+    cd RShiny_Malaria
     ```
 
 2. **Install the required R packages**:
