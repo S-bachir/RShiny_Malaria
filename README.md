@@ -1,10 +1,10 @@
 # Malaria and Related Data Visualization in Africa (2010–2023)
-
 [![R 4.0+](https://img.shields.io/badge/R-4.0%2B-blue)](https://cran.r-project.org/)
 [![Shiny](https://img.shields.io/badge/Shiny-App-%234CAF50)](https://shiny.rstudio.com/)
 [![Leaflet](https://img.shields.io/badge/Mapping-Leaflet-%2300BFFF)](https://rstudio.github.io/leaflet/)
 [![GeoJSON](https://img.shields.io/badge/GeoData-GeoJSON-%23444444)](https://geojson.org/)
 [![Data Transformation](https://img.shields.io/badge/Data--Transformation-dplyr-%23FF9A00)](https://dplyr.tidyverse.org/)
+[![MAP](https://img.shields.io/badge/Data%20Source-Malaria%20Atlas%20Project-%23E31837)](https://malariaatlas.org/)
 
 
 
@@ -66,11 +66,10 @@ This simple (local) Shiny app provides interactive visualizations of malaria and
 
 ## Data Sources
 
-- **National Data**: Found in `data/National_Unit-data_World.csv`
-- **Subnational Data**: Found in `data/Subnational_Unit-data.csv`
+- **National Data**: Found in `data/National_Unit-data_World.csv`, downloaded from the [Malaria Atlas Project (MAP)](https://malariaatlas.org/)
+- **Subnational Data**: Found in `data/Subnational_Unit-data.csv`, downloaded from the [Malaria Atlas Project (MAP)](https://malariaatlas.org/)
+- **GeoJSON Spatial Files**: Subnational level GeoJSON files containing administrative boundaries and variables (night time light, precipitation, etc.) downloaded from [GeoQuery](https://www.aiddata.org/geoquery), stored in `data/{Country}/{ISO3}_ADM{level}.geojson`
 - **Per-Country Data Files**: Located in `data/{Country}/{Country}.csv`
-- **GeoJSON Spatial Files**: Available for each country in `data/{Country}/{ISO3}_ADM{level}.geojson`
-
 ## Customization
 
 ### Adding New Data
