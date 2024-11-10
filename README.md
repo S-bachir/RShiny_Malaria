@@ -82,6 +82,10 @@ To modify color palettes, select from the available RColorBrewer palettes in the
 
 *Include plots or a GIF demonstrating the app's capabilities.*
 
+![App Demo Static](plots/GIF/Rshinymalariademo_staticmap.gif)
+![App Demo Interractive](plots/GIF/Rshinymalariademo_interractivemap.gif)
+
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository and make a pull request, or submit an issue for feature requests or bug reports.
