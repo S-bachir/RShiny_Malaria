@@ -23,10 +23,9 @@ This simple (local) Shiny app provides interactive visualizations of malaria and
 
 ## Features
 
-- **Map-Based Visualization**: Display national or subnational malaria data on an interactive map.
-- **Customizable Parameters**: Choose countries, metrics, color palettes, and year ranges for focused analysis.
-- **Downloadable Data**: Users can download the filtered data for offline analysis.
-- **Responsive UI**: The app is responsive and easy to use on desktop and mobile devices.
+- **Map-Based Visualization**: Display malaria data on interactive maps at both national and subnational levels.
+- **Customizable Parameters**: Select countries, metrics, color palettes, and year ranges for tailored analysis.
+- **Downloadable Data**: Easily download filtered datasets for offline use and further analysis.
 
 ## Installation
 
