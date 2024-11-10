@@ -84,9 +84,15 @@ To modify color palettes, select from the available RColorBrewer palettes in the
 
 <p align="center">
   <img src="plots/GIF/Rshinymalariademo_staticmap.gif" alt="App Demo Static"/>
+  <br>
+  This Rshiny minimal webapp displays ggplot type maps that can be downloaded. Run App_V0.R to use this version.
+  <br>
+  <img src="plots/example_staticmap_plot.png" alt="Example Static Map"/>
 </p>
 <p align="center">
   <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive"/>
+  <br>
+  A more interactive map using the mapview package with customizable color palettes. Run App_V0.1.R to use this version.
 </p>
 
 
