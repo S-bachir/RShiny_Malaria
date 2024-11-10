@@ -4,7 +4,6 @@
 [![Leaflet](https://img.shields.io/badge/Mapping-Leaflet-%2300BFFF)](https://rstudio.github.io/leaflet/)
 [![GeoJSON](https://img.shields.io/badge/GeoData-GeoJSON-%23444444)](https://geojson.org/)
 [![Data Transformation](https://img.shields.io/badge/Data--Transformation-dplyr-%23FF9A00)](https://dplyr.tidyverse.org/)
-[![MAP](https://img.shields.io/badge/Data%20Source-Malaria%20Atlas%20Project-%23E31837)](https://malariaatlas.org/)
 
 
 
@@ -69,7 +68,7 @@ This simple (local) Shiny app provides interactive visualizations of malaria and
 - **National Data**: Found in `data/National_Unit-data_World.csv`, downloaded from the [Malaria Atlas Project (MAP)](https://malariaatlas.org/)
 - **Subnational Data**: Found in `data/Subnational_Unit-data.csv`, downloaded from the [Malaria Atlas Project (MAP)](https://malariaatlas.org/)
 - **GeoJSON Spatial Files**: Subnational level GeoJSON files containing administrative boundaries and variables (night time light, precipitation, etc.) downloaded from [GeoQuery](https://www.aiddata.org/geoquery), stored in `data/{Country}/{ISO3}_ADM{level}.geojson`
-- **Per-Country Data Files**: Located in `data/{Country}/{Country}.csv`
+- **Per-Country Data Files**: Located in `data/{Country}/{Country}.csv` also downloaded from [GeoQuery](https://www.aiddata.org/geoquery)
 ## Customization
 
 ### Adding New Data
