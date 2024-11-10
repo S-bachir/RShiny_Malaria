@@ -86,14 +86,14 @@ Below are examples of the app's capabilities, showcasing both static and interac
 
 <div align="center">
   <figure>
-    <img src="plots/GIF/Rshinymalariademo_staticmap.gif" alt="App Demo Static" width="400"/>
+    <img src="plots/GIF/Rshinymalariademo_staticmap.gif" alt="App Demo Static" width="600"/>
     <figcaption>This RShiny minimal webapp displays ggplot type maps that can be downloaded. Run <code>App_V0.R</code> to use this version.</figcaption>
   </figure>
   <br>
-  <img src="plots/example_staticmap_plot.png" alt="Example Static Map" width="400"/>
+  <img src="plots/example_staticmap_plot.png" alt="Example Static Map" width="600"/>
   <br><br>
   <figure>
-    <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive" width="400"/>
+    <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive" width="600"/>
     <figcaption>A more interactive map using the mapview package with customizable color palettes. Run <code>App_V0.1.R</code> to use this version.</figcaption>
   </figure>
 </div>
