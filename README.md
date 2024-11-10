@@ -44,9 +44,14 @@ This simple (local) Shiny app provides interactive visualizations of malaria and
     ```
 
 3. **Run the app**:
-    ```R
-    shiny::runApp()
-    ```
+    - For the version with downloadable maps, run:
+      ```R
+      shiny::runApp('App_V0.R')
+      ```
+    - For the interactive version with customizable color palettes, run:
+      ```R
+      shiny::runApp('App_V0.1.R')
+      ```
 
 ## Usage
 
