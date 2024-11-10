@@ -96,7 +96,7 @@ Below are examples of the app's capabilities, showcasing both static and interac
   <br><br>
   <figure>
     <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive" width="800"/>
-    <figcaption>A more interactive map using the mapview package with customizable color palettes. Run <code>App_V0.1.R</code> to use this version.</figcaption>
+    <figcaption>A more interactive map using the mapview & leaflet packages with customizable color palettes. Run <code>App_V0.1.R</code> to use this version.</figcaption>
   </figure>
 </div>
 
