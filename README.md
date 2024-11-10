@@ -8,7 +8,7 @@
 
 
 
-This Shiny app provides interactive visualizations of malaria and related data across various African countries from 2010 to 2023. Users can explore national and subnational data, select various metrics, and customize visualizations for deeper insights into the malaria situation in Africa. Developed by Bachir SABO, this app uses `R`, `shiny`, `ggplot2`, `leaflet`, and several other R packages for data manipulation and visualization.
+This simple (local) Shiny app provides interactive visualizations of malaria and related data across various African countries from 2010 to 2023. Users can explore national and subnational data, select various metrics, and customize visualizations for deeper insights into the malaria situation in Africa. Developed by Bachir SABO, this app uses `R`, `shiny`, `ggplot2`, `leaflet`, and several other R packages for data manipulation and visualization.
 
 ## Table of Contents
 
@@ -51,12 +51,14 @@ This Shiny app provides interactive visualizations of malaria and related data a
 
 ## Usage
 
-1. **Launch the App**: Run `shiny::runApp()` to start the Shiny application.
+1. **Launch the App**: 
+   - Run `shiny::runApp('App_V0.R')` to start the version that allows downloading data analysis maps.
+   - Run `shiny::runApp('App_V0.1.R')` for a more interactive experience with customizable color palettes, though maps are not downloadable in this version.
 2. **Select Region Level**: Choose between `National` and `Subnational` data views.
 3. **Select Country**: Use the dropdown to select one or multiple countries.
 4. **Set Parameters**: Adjust the year range, metric, and color palette to refine the visualization.
 5. **Update Map**: Click `Update Map` to refresh the map with selected parameters.
-6. **Download Data**: Download the filtered dataset for offline analysis.
+6. **Download Data**: Download the filtered dataset for offline analysis (available in `App_V0.R`).
 
 ## Data Sources
 
@@ -69,7 +71,7 @@ This Shiny app provides interactive visualizations of malaria and related data a
 
 ### Adding New Data
 
-To include data for additional metrics or years:
+To include data for additional metrics or years, ensure you have a `data` directory in your project. If it doesn't exist, create it first. Then, add your data as follows:
 - **National Data**: Add data to `data/National_Unit-data_World.csv`
 - **Subnational Data**: Add data to `data/Subnational_Unit-data.csv`
 - **Country-Specific Data**: Add a new `{Country}.csv` in the `data/{Country}` directory.
@@ -80,20 +82,21 @@ To modify color palettes, select from the available RColorBrewer palettes in the
 
 ## Sample Visuals
 
-*Include plots or a GIF demonstrating the app's capabilities.*
+Below are examples of the app's capabilities, showcasing both static and interactive map features.
 
-<p align="center">
-  <img src="plots/GIF/Rshinymalariademo_staticmap.gif" alt="App Demo Static"/>
+<div align="center">
+  <figure>
+    <img src="plots/GIF/Rshinymalariademo_staticmap.gif" alt="App Demo Static" width="400"/>
+    <figcaption>This RShiny minimal webapp displays ggplot type maps that can be downloaded. Run <code>App_V0.R</code> to use this version.</figcaption>
+  </figure>
   <br>
-  This Rshiny minimal webapp displays ggplot type maps that can be downloaded. Run App_V0.R to use this version.
-  <br>
-  <img src="plots/example_staticmap_plot.png" alt="Example Static Map"/>
-</p>
-<p align="center">
-  <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive"/>
-  <br>
-  A more interactive map using the mapview package with customizable color palettes. Run App_V0.1.R to use this version.
-</p>
+  <img src="plots/example_staticmap_plot.png" alt="Example Static Map" width="400"/>
+  <br><br>
+  <figure>
+    <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive" width="400"/>
+    <figcaption>A more interactive map using the mapview package with customizable color palettes. Run <code>App_V0.1.R</code> to use this version.</figcaption>
+  </figure>
+</div>
 
 
 ## Contributing
