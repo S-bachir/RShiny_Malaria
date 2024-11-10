@@ -82,8 +82,12 @@ To modify color palettes, select from the available RColorBrewer palettes in the
 
 *Include plots or a GIF demonstrating the app's capabilities.*
 
-![App Demo Static](plots/GIF/Rshinymalariademo_staticmap.gif)
-![App Demo Interractive](plots/GIF/Rshinymalariademo_interractivemap.gif)
+<p align="center">
+  <img src="plots/GIF/Rshinymalariademo_staticmap.gif" alt="App Demo Static"/>
+</p>
+<p align="center">
+  <img src="plots/GIF/Rshinymalariademo_interractivemap.gif" alt="App Demo Interactive"/>
+</p>
 
 
 ## Contributing
